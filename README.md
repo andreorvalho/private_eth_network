@@ -68,26 +68,26 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
   # node_address - The nodes address from step 2, example: 0x22d10957a8D0A7Ebe6fB89AF0D853a3de86E0D41
   # authrpc_port - Needs to be different per node, example: 8551
 
-  ./geth --datadir node1 --port <node_port> --bootnodes <bootnode_address>  --networkid 123454321 --unlock <node_address> --password <password_file_path> --authrpc.port <authrpc_port>
+  geth --datadir node1 --port <node_port> --bootnodes <bootnode_address>  --networkid 123454321 --unlock <node_address> --password <password_file_path> --authrpc.port <authrpc_port>
   ```
 
 INFO:
 
 node1
-Public address of the key:   0xEFa76134e3f4EFb19a1F596517b182c5B554b4aC
-Path of the secret key file: node1/keystore/UTC--2023-02-22T08-48-18.549429000Z--efa76134e3f4efb19a1f596517b182c5b554b4ac
+Public address of the key:   0x9E1F273666909C7E0dE6e84717Baed0da72af507
+Path of the secret key file: node1/keystore/UTC--2023-02-23T15-31-18.898484000Z--9e1f273666909c7e0de6e84717baed0da72af507
 
 node2
-Public address of the key:   0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17
-Path of the secret key file: node2/keystore/UTC--2023-02-22T08-49-07.682412000Z--6b1eb8693a7157092e3fab3edb24470335fd0e17
+Public address of the key:   0x77647382DbDF2F68aDcee4995d4c2F5640C742ad
+Path of the secret key file: node2/keystore/UTC--2023-02-23T15-31-28.518306000Z--77647382dbdf2f68adcee4995d4c2f5640c742ad
 
 START THE NODES:
 
 bootnode -nodekey boot.key -addr :30305
 
-geth --datadir node1 --port 30307 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17 --password node1/password.txt --authrpc.port 8551
+geth --datadir node1 --port 30307 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0xeB255f9ac33EF76A686d28b8e150dB6c5c37ACa5 --password node1/password.txt --authrpc.port 8551 --gasprice '1' --mine console
 
-geth --datadir node2 --port 30308 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17 --password node2/password.txt --authrpc.port 8552
+geth --datadir node2 --port 30308 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x16F28CdaE086163e9DF97bF48A8013972987250f --password node2/password.txt --authrpc.port 8552 --gasprice '1' --mine console
 
 LAUNCH THE JAVASCRIPT CONSOLE:
 
@@ -99,6 +99,10 @@ eth.getBalance('0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17');
 get balance for current account:
 eth.getBalance(eth.accounts[0])
 
-eth.sendTransaction({ from: '0xEFa76134e3f4EFb19a1F596517b182c5B554b4aC', to: '0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17' , value: 25000 });
+web3.eth.estimateGas({ from: '0xeB255f9ac33EF76A686d28b8e150dB6c5c37ACa5', to: '0x16F28CdaE086163e9DF97bF48A8013972987250f' , value: 1, gasPrice: 1000 })
 
 eth.getBlock('latest')
+
+web3.eth.estimateGas(})
+web3.eth.gasPrice
+clique.getSnapshot()
