@@ -41,6 +41,8 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
     }
   ```
 
+  p.s. we can create the genesis block with the `puppeth` command
+
 5. In each node folder create a copy of the genesis.json file
 
 6. Setup the nodes with the init command
@@ -85,24 +87,31 @@ START THE NODES:
 
 bootnode -nodekey boot.key -addr :30305
 
-geth --datadir node1 --port 30307 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0xeB255f9ac33EF76A686d28b8e150dB6c5c37ACa5 --password node1/password.txt --authrpc.port 8551 --gasprice '1' --mine console
+geth --datadir node1 --port 30307 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x9E1F273666909C7E0dE6e84717Baed0da72af507 --password node1/password.txt --authrpc.port 8551
 
-geth --datadir node2 --port 30308 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x16F28CdaE086163e9DF97bF48A8013972987250f --password node2/password.txt --authrpc.port 8552 --gasprice '1' --mine console
+geth --datadir node2 --port 30308 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x77647382DbDF2F68aDcee4995d4c2F5640C742ad --password node2/password.txt --authrpc.port 8552
 
-LAUNCH THE JAVASCRIPT CONSOLE:
+more options:
+ --gasprice '1' --mine console
 
+- LAUNCH THE JAVASCRIPT CONSOLE:
 geth attach node1/geth.ipc
 
+- How many peers are on my network:
 net.peerCount
-eth.getBalance('0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17');
 
-get balance for current account:
+- Get balance for current account:
 eth.getBalance(eth.accounts[0])
-
-web3.eth.estimateGas({ from: '0xeB255f9ac33EF76A686d28b8e150dB6c5c37ACa5', to: '0x16F28CdaE086163e9DF97bF48A8013972987250f' , value: 1, gasPrice: 1000 })
-
-eth.getBlock('latest')
-
-web3.eth.estimateGas(})
-web3.eth.gasPrice
-clique.getSnapshot()
+- Get balance for another account:
+eth.getBalance('<address>');
+- Send a transaction:
+eth.sendTransaction({ from: '0x9E1F273666909C7E0dE6e84717Baed0da72af507', to: '0x77647382DbDF2F68aDcee4995d4c2F5640C742ad' , value: 1, gasPrice: 1000 })
+check gas for transaction: web3.eth.estimateGas({ from: '0x9E1F273666909C7E0dE6e84717Baed0da72af507', to: '0x77647382DbDF2F68aDcee4995d4c2F5640C742ad' , value: 1, gasPrice: 1000 })
+- Start mining:
+miner.start()
+- Stop mining:
+miner.stop()
+- Information about network:
+last block: eth.getBlock('latest')
+whole network state: clique.getSnapshot()
+gas price: web3.eth.gasPrice
