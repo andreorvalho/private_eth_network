@@ -15,6 +15,7 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
   Need to run this command for each folder you create on the previous step. This will ask for a password which you will have to remember on the next steps.
 
   > geth --datadir node<node_id> account new
+  > geth --datadir node1 account new --password node1/password.txt
 
   This will return an output like this:
 
@@ -87,9 +88,9 @@ START THE NODES:
 
 bootnode -nodekey boot.key -addr :30305
 
-geth --datadir node1 --port 30307 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x9E1F273666909C7E0dE6e84717Baed0da72af507 --password node1/password.txt --authrpc.port 8551
+geth --datadir node1 --port 30307 --bootnodes "enode://cde26924ee95fb63497fb21bf98fa4dff5a1411ec8dc6aad0239b2cde97dac7fdf7b9636b1dd9553e0ff4f2d44b554c424cbedca5f1be7ca07e2975f4a32cfd2@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x612254c1125C1E662e6219dd52A140bE2586F56C --password node1/password.txt --authrpc.port 8551
 
-geth --datadir node2 --port 30308 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x77647382DbDF2F68aDcee4995d4c2F5640C742ad --password node2/password.txt --authrpc.port 8552
+geth --datadir node2 --port 30308 --bootnodes "enode://cde26924ee95fb63497fb21bf98fa4dff5a1411ec8dc6aad0239b2cde97dac7fdf7b9636b1dd9553e0ff4f2d44b554c424cbedca5f1be7ca07e2975f4a32cfd2@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0xD4a7fE57166EfD04639cA7cdba1f0623caa9223F --password node2/password.txt --authrpc.port 8552
 
 more options:
  --gasprice '1' --mine console
@@ -115,3 +116,5 @@ miner.stop()
 last block: eth.getBlock('latest')
 whole network state: clique.getSnapshot()
 gas price: web3.eth.gasPrice
+
+pupeth --network=andre
