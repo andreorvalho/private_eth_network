@@ -24,7 +24,9 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
 
 3. Add a password.txt file to each node folder with the password written in there.
 
-4. Change the genesis template file given to include the addresses(without the 0x) of the nodes created and how much ETH they will have on their accounts:
+4. Change the genesis template file:
+
+  include the addresses(without the 0x) of the nodes created and how much ETH they will have on their accounts on the alloc field:
 
   ```
   "alloc": {
@@ -40,6 +42,16 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
       "22d10957a8D0A7Ebe6fB89AF0D853a3de86E0D41": { "balance": "300000" },
       "4f3da1CB3ebDAA7032d09f018939b50927387d02": { "balance": "400000" }
     }
+  ```
+
+  Also one of the nodes needs to be a sealer and its address needs to be added to the extra data field with zeros before and after it:
+
+  ```
+  "extradata": "0x<64 zeros><address><130 zeros>"
+  ```
+
+  ```
+  "extradata": "0x000000000000000000000000000000000000000000000000000000000000000022d10957a8D0A7Ebe6fB89AF0D853a3de86E0D410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
   ```
 
   p.s. we can create the genesis block with the `puppeth` command
@@ -74,23 +86,13 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
   geth --datadir node1 --port <node_port> --bootnodes <bootnode_address>  --networkid 123454321 --unlock <node_address> --password <password_file_path> --authrpc.port <authrpc_port>
   ```
 
-INFO:
-
-node1
-Public address of the key:   0x9E1F273666909C7E0dE6e84717Baed0da72af507
-Path of the secret key file: node1/keystore/UTC--2023-02-23T15-31-18.898484000Z--9e1f273666909c7e0de6e84717baed0da72af507
-
-node2
-Public address of the key:   0x77647382DbDF2F68aDcee4995d4c2F5640C742ad
-Path of the secret key file: node2/keystore/UTC--2023-02-23T15-31-28.518306000Z--77647382dbdf2f68adcee4995d4c2f5640c742ad
-
 START THE NODES:
 
 bootnode -nodekey boot.key -addr :30305
 
-geth --datadir node1 --port 30307 --bootnodes "enode://cde26924ee95fb63497fb21bf98fa4dff5a1411ec8dc6aad0239b2cde97dac7fdf7b9636b1dd9553e0ff4f2d44b554c424cbedca5f1be7ca07e2975f4a32cfd2@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x612254c1125C1E662e6219dd52A140bE2586F56C --password node1/password.txt --authrpc.port 8551
+geth --datadir node1 --port 30307 --bootnodes "enode://2c462ea453197ff92f901725f3ef6eea679294baabe9037ef262a65262d5de6f74d6d622157f39041facdbf1048c44d83eefe96921a5912a2373673e4173c585@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0xb4f8a289ac175440cc81b5f4fc044eee3eb42a39 --password node1/password.txt --authrpc.port 8551
 
-geth --datadir node2 --port 30308 --bootnodes "enode://cde26924ee95fb63497fb21bf98fa4dff5a1411ec8dc6aad0239b2cde97dac7fdf7b9636b1dd9553e0ff4f2d44b554c424cbedca5f1be7ca07e2975f4a32cfd2@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0xD4a7fE57166EfD04639cA7cdba1f0623caa9223F --password node2/password.txt --authrpc.port 8552
+geth --datadir node2 --port 30308 --bootnodes "enode://2c462ea453197ff92f901725f3ef6eea679294baabe9037ef262a65262d5de6f74d6d622157f39041facdbf1048c44d83eefe96921a5912a2373673e4173c585@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x3a73b3cfeeb7c8885e4d9b100c4ee2dbb2bc094e --password node2/password.txt --authrpc.port 8552
 
 more options:
  --gasprice '1' --mine console
@@ -106,8 +108,8 @@ eth.getBalance(eth.accounts[0])
 - Get balance for another account:
 eth.getBalance('<address>');
 - Send a transaction:
-eth.sendTransaction({ from: '0x9E1F273666909C7E0dE6e84717Baed0da72af507', to: '0x77647382DbDF2F68aDcee4995d4c2F5640C742ad' , value: 1, gasPrice: 1000 })
-check gas for transaction: web3.eth.estimateGas({ from: '0x9E1F273666909C7E0dE6e84717Baed0da72af507', to: '0x77647382DbDF2F68aDcee4995d4c2F5640C742ad' , value: 1, gasPrice: 1000 })
+eth.sendTransaction({ from: eth.accounts[0], to: '0x3a73b3cfeeb7c8885e4d9b100c4ee2dbb2bc094e' , value: 1, gasPrice: 1000, data: 0x616e647265 })
+check gas for transaction: web3.eth.estimateGas({ from: eth.accounts[0], to: '0x90Af074EB5399C00587C5ef742CEc027aE77d9dF' , value: 1, gasPrice: 1000 })
 - Start mining:
 miner.start()
 - Stop mining:
@@ -118,3 +120,7 @@ whole network state: clique.getSnapshot()
 gas price: web3.eth.gasPrice
 
 pupeth --network=andre
+
+0x3057a9d4f8d410293d4b4766b4b1c82c242fe3f6ecb2c114701b723ddb24312e
+
+eth.getTransaction("0x6f1370512787ae964206935a628b0d73bea1a39db879cdc7fb57320719da507c")
