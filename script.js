@@ -38,7 +38,7 @@ var port = "30307";
 var authrpcPort = "8551";
 
 Object.keys(addresses).forEach((name) => {
-  exec(`geth --datadir ${name} --port ${port} --bootnodes "enode://${bootNodeAddress}@127.0.0.1:0?discport=30305" --networkid 123454321 --unlock ${addresses[name]} --password ${name}/password.txt --authrpc.port ${authrpcPort} &`);
+  exec(`geth --datadir ${name} --port ${port} --bootnodes "enode://${bootNodeAddress}@127.0.0.1:0?discport=30305" --networkid 123454321 --unlock ${addresses[name]} --password ${name}/password.txt --authrpc.port ${authrpcPort} --http.api "eth,net,web3,personal,miner" &`);
   port++;
   authrpcPort++;
 });
