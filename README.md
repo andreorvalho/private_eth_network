@@ -90,15 +90,20 @@ START THE NODES:
 
 bootnode -nodekey boot.key -addr :30305
 
-geth --datadir node1 --port 30307 --bootnodes "enode://2c462ea453197ff92f901725f3ef6eea679294baabe9037ef262a65262d5de6f74d6d622157f39041facdbf1048c44d83eefe96921a5912a2373673e4173c585@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0xb4f8a289ac175440cc81b5f4fc044eee3eb42a39 --password node1/password.txt --authrpc.port 8551
+geth --datadir node1 --port 30307 --bootnodes "enode://5f30103aba507e35f42ad14bdaa19c734e8769bec724ca56b242730647dd907807025696a1c38013388e6693da1128720fbd73ba9eab346c9a150bcd429363ca@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0xae9a61f72f0ae89e92fb0400cbd0084ae4f8e7e4 --password node1/password.txt --authrpc.port 8551
 
-geth --datadir node2 --port 30308 --bootnodes "enode://2c462ea453197ff92f901725f3ef6eea679294baabe9037ef262a65262d5de6f74d6d622157f39041facdbf1048c44d83eefe96921a5912a2373673e4173c585@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x3a73b3cfeeb7c8885e4d9b100c4ee2dbb2bc094e --password node2/password.txt --authrpc.port 8552
+geth --datadir node2 --port 30308 --bootnodes "enode://bea688cb05004a3563d1d862471cb1f817f707ff918d9feff0e777d424c067f5f8c527eb6ba6174f9b8df43fae5209bb30a3130f51230b155eb2805949af8d76@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x9109f5d5fe5b730c4c1f4652b1ea5ea8f83fa044 --password node2/password.txt --authrpc.port 8552
+
+geth --datadir nodes --port 30307 --ipcdisable --syncmode full --http --http.addr 0.0.0.0 --http.api admin,eth,miner,net,txpool,personal,web3 --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port 8545 --bootnodes "enode://07b27533cee26f94b3ef2e5a7b8a44c4495718ea81d76c7132897ce3f74c2ed4efe0ed8fa83332b2f82862abad7096b6cf646f96dab5dcf3798e8fdcfa1bf266@127.0.0.1:0?discport=30305"  --networkid 1234 --unlock 0x0103dcadccbe9c01239aa41758b69a8d1b1644ef --password nodes/password.txt
+
+geth --datadir nodes --port 30307 --bootnodes "enode://961ed75382a06264a9eccae558dd59b5ebce84beef02700225f92f69672f1730b0599635ddbaff52b2ccd5ff2bf4ca89b520a77871490fd8963b09891b42180f@127.0.0.1:0?discport=30305" --networkid 123454321 --unlock 0x3df09f16ab0a17759f2a1e61d5bc4d499f790163 --password nodes/password.txt --authrpc.port 8551 --http.api "eth,net,web3,personal,miner"
 
 more options:
  --gasprice '1' --mine console
 
 - LAUNCH THE JAVASCRIPT CONSOLE:
-geth attach node1/geth.ipc
+geth attach node2/geth.ipc
+geth attach http://127.0.0.1:8545
 
 - How many peers are on my network:
 net.peerCount
@@ -108,7 +113,7 @@ eth.getBalance(eth.accounts[0])
 - Get balance for another account:
 eth.getBalance('<address>');
 - Send a transaction:
-eth.sendTransaction({ from: eth.accounts[0], to: '0x3a73b3cfeeb7c8885e4d9b100c4ee2dbb2bc094e' , value: 1, gasPrice: 1000, data: 0x616e647265 })
+eth.sendTransaction({ from: eth.accounts[0], to: '0x06e6c1d477d73b0251ced207b7fd0131eac4b83b' , value: 1, gasPrice: 1000, data: '0x616e647265' })
 check gas for transaction: web3.eth.estimateGas({ from: eth.accounts[0], to: '0x90Af074EB5399C00587C5ef742CEc027aE77d9dF' , value: 1, gasPrice: 1000 })
 - Start mining:
 miner.start()
