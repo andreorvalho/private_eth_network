@@ -41,8 +41,8 @@ console.log("bootnode up");
 var port = "30307";
 var httpPort = "8545";
 
-console.log(`geth --datadir node1 --port ${port} --ipcdisable --syncmode full --http --http.addr 0.0.0.0 --http.api admin,eth,miner,net,txpool,personal,web3 --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port ${httpPort} --bootnodes "enode://${bootNodeAddress}@127.0.0.1:0?discport=30305"  --networkid 1234 --unlock ${addresses.node1} --password node1/password.txt &`);
-exec(`geth --datadir node1 --port ${port} --ipcdisable --syncmode full --http --http.addr 0.0.0.0 --http.api admin,eth,miner,net,txpool,personal,web3 --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port ${httpPort} --bootnodes "enode://${bootNodeAddress}@127.0.0.1:0?discport=30305"  --networkid 1234 --unlock ${addresses.node1} --password node1/password.txt &`);
+// console.log(`geth --datadir node1 --port ${port} --ipcdisable --syncmode full --http --http.addr 0.0.0.0 --http.api admin,eth,miner,net,txpool,personal,web3 --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port ${httpPort} --bootnodes "enode://${bootNodeAddress}@127.0.0.1:0?discport=30305"  --networkid 1234 --unlock ${addresses.node1} --password node1/password.txt &`);
+// exec(`geth --datadir node1 --port ${port} --ipcdisable --syncmode full --http --http.addr 0.0.0.0 --http.api admin,eth,miner,net,txpool,personal,web3 --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port ${httpPort} --bootnodes "enode://${bootNodeAddress}@127.0.0.1:0?discport=30305"  --networkid 1234 --unlock ${addresses.node1} --password node1/password.txt &`);
 
-console.log("all nodes up");
+// console.log("all nodes up");
 

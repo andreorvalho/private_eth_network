@@ -1,0 +1,30 @@
+=============== Mar 10, 2023 (WET) ===============
+10:52:11.932170 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:52:11.941343 db@open opening
+10:52:11.941761 version@stat F·[] S·0B[] Sc·[]
+10:52:11.944499 db@janitor F·2 G·0
+10:52:11.944515 db@open done T·3.156792ms
+10:52:11.962874 db@close closing
+10:52:11.963026 db@close done T·145.625µs
+=============== Mar 10, 2023 (WET) ===============
+10:54:30.895039 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:54:30.895717 version@stat F·[] S·0B[] Sc·[]
+10:54:30.895731 db@open opening
+10:54:30.895768 journal@recovery F·1
+10:54:30.896609 journal@recovery recovering @1
+10:54:30.900881 memdb@flush created L0@2 N·18 S·1KiB "\x1d\xe2\x96..W|!,v4":"Ǩ\x1d..\x0f\x92\x01,v6"
+10:54:30.901540 version@stat F·[1] S·1KiB[1KiB] Sc·[0.25]
+10:54:30.912999 db@janitor F·3 G·0
+10:54:30.913096 db@open done T·17.357416ms
+10:58:40.765565 db@close closing
+10:58:40.765870 db@close done T·305.541µs
+=============== Mar 10, 2023 (WET) ===============
+10:59:09.005948 log@legend F·NumFile S·FileSize N·Entry C·BadEntry B·BadBlock Ke·KeyError D·DroppedEntry L·Level Q·SeqNum T·TimeElapsed
+10:59:09.006372 version@stat F·[1] S·1KiB[1KiB] Sc·[0.25]
+10:59:09.006389 db@open opening
+10:59:09.006436 journal@recovery F·1
+10:59:09.007249 journal@recovery recovering @3
+10:59:09.010662 memdb@flush created L0@5 N·15 S·945B "Dat..ion,v21":"unc..own,v30"
+10:59:09.011269 version@stat F·[2] S·2KiB[2KiB] Sc·[0.50]
+10:59:09.021811 db@janitor F·4 G·0
+10:59:09.021826 db@open done T·15.428458ms
