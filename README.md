@@ -162,12 +162,10 @@ web3.eth.estimateGas({ from: eth.accounts[0], to: '0x90Af074EB5399C00587C5ef742C
 web3.eth.getTransaction('<transaction_id>') - this id is returned by `sendTransaction`
 eth.getTransaction("0x03b759fe11c104f8aad972ed2337e0f2e7f6c6bf26138badcbbf55801f643303")
 - Start mining:
-miner.start()
+miner.start() - this only works from the sealing node
 - Stop mining:
 miner.stop()
 - Information about network:
 last block: eth.getBlock('latest')
 whole network state: clique.getSnapshot()
 gas price: web3.eth.gasPrice
-
-web3.eth.sendTransaction({ from: eth.accounts[0], to: '0x8a16b7bbe42f6d3a7788c309fa951924a2bfdee1' , value: 1, gasPrice: 1000, data: '0x616e647265' })
