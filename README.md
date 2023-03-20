@@ -17,6 +17,7 @@ if using nvm you can just do `nvm use` or if you dont have that version of node 
 https://geth.ethereum.org/docs/fundamentals/private-network
 https://medium.com/coinmonks/setup-geth-ethereum-private-network-3806ef7fbe42
 https://medium.com/hackernoon/setup-your-own-private-proof-of-authority-ethereum-network-with-geth-9a0a3750cda8
+https://ethereum.stackexchange.com/questions/56460/what-is-the-purpose-of-non-mining-sealer-nodes-in-clique-poa-private-ethereum-ne
 
 ## Step by step guide:
 
@@ -161,6 +162,8 @@ web3.eth.estimateGas({ from: eth.accounts[0], to: '0x90Af074EB5399C00587C5ef742C
 - Check a transaction:
 web3.eth.getTransaction('<transaction_id>') - this id is returned by `sendTransaction`
 eth.getTransaction("0x03b759fe11c104f8aad972ed2337e0f2e7f6c6bf26138badcbbf55801f643303")
+- check a receipt of a transaction:
+eth.getTransactionReceipt()
 - Start mining:
 miner.start() - this only works from the sealing node
 - Stop mining:

@@ -21,12 +21,12 @@ for (var nodeNumber = numberOfNodes; nodeNumber > 0 ; nodeNumber--) {
 
 var data = JSON.parse(fs.readFileSync(`${process.cwd()}/genesis.json.template`));
 Object.values(addresses).forEach((address) => {
-  data.alloc[address.replace(/\n/g, '')] = { "balance": "100000000" }
+  data.alloc[address] = { "balance": "100000000000000000000000000" }
 });
 const extraDataStart = "0x0000000000000000000000000000000000000000000000000000000000000000";
 const extraDataFinish = "0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
-data.extradata = extraDataStart + addresses.node1.replace('0x', '') + extraDataFinish
+data.extradata = extraDataStart + Object.values(addresses).map(address => address.replace('0x', '')).join('') + extraDataFinish
 
 for (var nodeNumber = numberOfNodes; nodeNumber > 0 ; nodeNumber--) {
   fs.writeFileSync(`./node${nodeNumber}/genesis.json`, JSON.stringify(data, null, 2) , 'utf-8');
