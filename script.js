@@ -38,3 +38,22 @@ console.log("bootNodeAddress: " + bootNodeAddress);
 
 exec('bootnode -nodekey boot.key -addr :30305 &');
 console.log("bootnode up");
+
+var port = "30307";
+var authrpcPort = "8551";
+var httpPort = "8545"
+
+Object.keys(addresses).forEach((name) => {
+  console.log(`geth --datadir ${name} --port ${port} --ipcdisable --syncmode full --http --http.addr 0.0.0.0 --http.api admin,eth,miner,net,txpool,personal,web3 --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port ${httpPort} --bootnodes "enode://${bootNodeAddress}@127.0.0.1:0?discport=30305" --networkid 12345 --unlock ${addresses[name]} --password ${name}/password.txt --authrpc.port ${authrpcPort}`);
+  // exec(`geth --datadir ${name} --port ${port} --ipcdisable --syncmode full
+  //  --http --http.addr 0.0.0.0 --http.api admin,eth,miner,net,txpool,personal,web3
+  //  --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port ${httpPort}
+  //  --bootnodes "enode://${bootNodeAddress}@127.0.0.1:0?discport=30305"
+  //  --networkid 12345 --unlock ${addresses[name]} --password ${name}/password.txt
+  //  --authrpc.port ${authrpcPort}`);
+  port++;
+  authrpcPort++;
+  httpPort++;
+});
+
+//console.log("all nodes up");

@@ -6,11 +6,21 @@ Node version - v18.12.1
 I recommend to use nvm and you can use brew to install it: https://formulae.brew.sh/formula/nvm
 
 1. install node and npm:
-if using nvm you can just do `nvm use` or if you dont have that version of node installed `nvm install v18.12.1`
-2. run npm install to install all dependencies
-3. node script.js and follow the steps. This will already start your bootnode(You can read more about it on step 7 on the step by step guide)
-4. Then you need to start the nodes by hand(Step 8 on the step by step guide)
-5. If you want to restart it I recommend usin the deletion script `node deletion-script.js`
+if using nvm you can just do `nvm use` or if you dont have that version of node installed `nvm install v18.12.1`.
+2. run `npm install` to install all dependencies.
+3. run `node script.js` and follow the steps. This will already start your bootnode(You can read more about it on step 7 on the step by step guide).
+4. Then you need to start the nodes by hand with an http address and api(Step 8 on the step by step guide).
+5. All nodes are sealers and they all need to be mining for transactions to work. So for each node you have to run:
+```
+# http_address and http_port specific of the node
+geth attach http://<http_address>:<http_port>
+
+# on the console
+miner.start()
+```
+6. run `node app.js` to create a test transaction
+
+7. If you want to restart it I recommend using the deletion script `node deletion-script.js`
 
 ## Sources:
 
@@ -140,13 +150,15 @@ https://ethereum.stackexchange.com/questions/56460/what-is-the-purpose-of-non-mi
 more options:
 --mine console starts a console right away so you can mine
 
-# Important commands
+9. Launch a javascript console
 
-## Launch a javascript console:
 Start a console when the node is connected to the RPC:
   - geth attach <datadir>/geth.ipc || example: geth attach node1/geth.ipc
+
 Start a console when the node is connected to HTTP:
 geth attach http://<http_address>:<http_port> || example: geth attach http://127.0.0.1:8546
+
+# Important commands
 
 ## commands for the console
 - How many peers are on my network:
