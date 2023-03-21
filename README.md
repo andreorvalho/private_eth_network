@@ -158,6 +158,38 @@ Start a console when the node is connected to the RPC:
 Start a console when the node is connected to HTTP:
 geth attach http://<http_address>:<http_port> || example: geth attach http://127.0.0.1:8546
 
+# Run a smart contract
+
+## Sources:
+https://medium.com/blockchainbistro/set-up-a-private-ethereum-blockchain-and-deploy-your-first-solidity-smart-contract-on-the-caa8334c343d
+
+## Steps
+
+1. Make sure to update the truffle-config.js on the development field:
+
+```
+# geth_http_address - The address where your node is running, locally normally is "127.0.0.1"
+# geth_http_port - The port where your node is running, normally:  8545
+# geth_node_address - The blockchain address from the node, example: 0xa490296e3bcd5c78afde68f9ea86e83adde6405e
+
+development: {
+  host: <geth_http_address>,
+  port: <geth_http_port>
+  network_id: "*",
+  from: <geth_node_address>
+  gas: 2000000
+}
+```
+
+2. run `truffle compile` to compile your contracts
+3. run `truffle migrate` to migrate your contracts
+4. run `truffle console` to run the console and once on the console run:
+```
+> var dApp
+> Hello.deployed().then(function(instance) { dApp = instance; })
+> dApp.message.call()
+```
+
 # Important commands
 
 ## commands for the console
