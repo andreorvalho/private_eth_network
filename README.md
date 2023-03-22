@@ -1,8 +1,39 @@
-## Create a simple private network locally(ETH):
+# Create a simple private network locally(ETH):
 
-following: https://geth.ethereum.org/docs/fundamentals/private-network
+## To start the app:
+
+Node version - v18.12.1
+I recommend to use nvm and you can use brew to install it: https://formulae.brew.sh/formula/nvm
+
+1. install node and npm:
+if using nvm you can just do `nvm use` or if you dont have that version of node installed `nvm install v18.12.1`.
+2. run `npm install` to install all dependencies.
+3. run `node script.js` and follow the steps. This will already start your bootnode(You can read more about it on step 7 on the step by step guide).
+4. Then you need to start the nodes by hand with an http address and api(Step 8 on the step by step guide).
+5. All nodes are sealers and they all need to be mining for transactions to work. So for each node you have to run:
+```
+# http_address and http_port specific of the node
+geth attach http://<http_address>:<http_port>
+
+# on the console
+miner.start()
+```
+6. run `node app.js` to create a test transaction
+
+7. If you want to restart it I recommend using the deletion script `node deletion-script.js`
+
+## Sources:
+
+https://geth.ethereum.org/docs/fundamentals/private-network
+https://medium.com/coinmonks/setup-geth-ethereum-private-network-3806ef7fbe42
+https://medium.com/hackernoon/setup-your-own-private-proof-of-authority-ethereum-network-with-geth-9a0a3750cda8
+https://ethereum.stackexchange.com/questions/56460/what-is-the-purpose-of-non-mining-sealer-nodes-in-clique-poa-private-ethereum-ne
+
+## Step by step guide:
 
 1. Create as many nodes as you want:
+
+  We create seperate folders to be easier to start the nodes separately as you need a data directory for each one when starting geth
 
   > mkdir node<node_id> node2<node_id+1>
 
@@ -15,15 +46,18 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
   Need to run this command for each folder you create on the previous step. This will ask for a password which you will have to remember on the next steps.
 
   > geth --datadir node<node_id> account new
+  > geth --datadir node1 account new --password node1/password.txt
 
   This will return an output like this:
 
   Public address of the key:   <address>
   Path of the secret key file: <location_of_secret_key>
 
-3. Add a password.txt file to each node folder with the password written in there.
+3. Add a password.txt file to each node folder with the password written in there to help start geth
 
-4. Change the genesis template file given to include the addresses(without the 0x) of the nodes created and how much ETH they will have on their accounts:
+4. Change the genesis template file:
+
+  include the addresses(without the 0x) of the nodes created and how much ETH they will have on their accounts on the alloc field:
 
   ```
   "alloc": {
@@ -41,7 +75,19 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
     }
   ```
 
-5. In each node folder create a copy of the genesis.json file
+  Also one of the nodes needs to be a sealer and its address needs to be added to the extra data field with zeros before and after it:
+
+  ```
+  "extradata": "0x<64 zeros><address><130 zeros>"
+  ```
+
+  ```
+  "extradata": "0x000000000000000000000000000000000000000000000000000000000000000022d10957a8D0A7Ebe6fB89AF0D853a3de86E0D410000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+  ```
+
+  p.s. we can create the genesis block with the `puppeth` command
+
+5. Create a copy of the genesis.json file for each node folder
 
 6. Setup the nodes with the init command
 
@@ -51,54 +97,122 @@ following: https://geth.ethereum.org/docs/fundamentals/private-network
 
   > geth init --datadir node1 node1/genesis.json
 
-7. Configure a boot node using the bootnode developer tool:
+7. Configure a boot node using the bootnode developer tool, this will help nodes find peers in the network:
 
   ```
   # first create a key for the boot node
   bootnode -genkey boot.key
-  # Then create and start the bootnode
+  # Then create and start the bootnode you can add a & at the end to start the process in the background
   bootnode -nodekey boot.key -addr :30305
+  # if you start the process in the background you can check the node address with this command:
+  bootnode -nodekey boot.key -addr :30305 --writeaddress
   ```
 
 8. Start the nodes individually:
 
+  Here you can use RPC which will allow the nodes to discover each other and also access a console
+
   ```
-  # node_port - Needs to be a different one per node including the bootnode, example: 30306
-  # bootnode_address - This is returned by command above, example: enode://482f9fbfa9e065cb21d5917e2dbc4e53a182555ccedcab11f2e482233110a3611ece3472911f3b9516488b5ee317592cf96254ca105f3db8ad8d85109e5527b3@127.0.0.1:0?discport=30305
+  # data_directory - directory where the data of the blockchain for this node will be kept
+  # node_port - Needs to be a different one per node including the bootnode, example: 30306.On a real network (one node per machine), use the same port.
+  # bootnode_address - This is the address returned by the bootnode command on step 7, example: enode://482f9fbfa9e065cb21d5917e2dbc4e53a182555ccedcab11f2e482233110a3611ece3472911f3b9516488b5ee317592cf96254ca105f3db8ad8d85109e5527b3@127.0.0.1:0?discport=30305
+  # network_id - This is the value of chainId inside the config on your genesis block file
   # node_address - The nodes address from step 2, example: 0x22d10957a8D0A7Ebe6fB89AF0D853a3de86E0D41
+  # password_file_path - the path to the password file created on step 3
   # authrpc_port - Needs to be different per node, example: 8551
 
-  ./geth --datadir node1 --port <node_port> --bootnodes <bootnode_address>  --networkid 123454321 --unlock <node_address> --password <password_file_path> --authrpc.port <authrpc_port>
+  geth --datadir <data_directory> --port <node_port> --bootnodes <bootnode_address>  --networkid <network_id> --unlock <node_address> --password <password_file_path> --authrpc.port <authrpc_port>
   ```
 
-INFO:
+  Example:
 
-node1
-Public address of the key:   0xEFa76134e3f4EFb19a1F596517b182c5B554b4aC
-Path of the secret key file: node1/keystore/UTC--2023-02-22T08-48-18.549429000Z--efa76134e3f4efb19a1f596517b182c5b554b4ac
+  geth --datadir node1 --port 30307 --bootnodes "enode://482f9fbfa9e065cb21d5917e2dbc4e53a182555ccedcab11f2e482233110a3611ece3472911f3b9516488b5ee317592cf96254ca105f3db8ad8d85109e5527b3@127.0.0.1:0?discport=30305" --networkid 12345 --unlock 0x742faffe4e2885411ca6b9b8c5f68be92e10d25a --password node1/password.txt --authrpc.port 8551
 
-node2
-Public address of the key:   0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17
-Path of the secret key file: node2/keystore/UTC--2023-02-22T08-49-07.682412000Z--6b1eb8693a7157092e3fab3edb24470335fd0e17
+  Or you can start your nodes with http which will allow an easier way to interact with the blockchain via code.
 
-START THE NODES:
+  ```
+  # http_address - The http address to use when accessing the node. locally you can use: 0.0.0.0 which will default to localhost
+  # apis_list - The list of api's that will be available on the node through http
+  # http_port - the port on which this will be available the http access
+  # bootnode_address - This is the address returned by the bootnode command on step 7, example: enode://482f9fbfa9e065cb21d5917e2dbc4e53a182555ccedcab11f2e482233110a3611ece3472911f3b9516488b5ee317592cf96254ca105f3db8ad8d85109e5527b3@127.0.0.1:0?discport=30305
+  # network_id - This is the value of chainId inside the config on your genesis block file
+  # node_address - The nodes address from step 2, example: 0x22d10957a8D0A7Ebe6fB89AF0D853a3de86E0D41
+  # password_file_path - the path to the password file created on step 3
+  # authrpc_port - Needs to be different per node, example: 8551
 
-bootnode -nodekey boot.key -addr :30305
+  geth --datadir <data_directory> --port <node_port> --ipcdisable --syncmode full --http --http.addr <http_address> --http.api <apis_list> --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port <http_port> --bootnodes <bootnode_address>  --networkid <network_id> --unlock <node_address> --password <password_file_path> --authrpc.port <authrpc_port>
 
-geth --datadir node1 --port 30307 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17 --password node1/password.txt --authrpc.port 8551
+  Example:
 
-geth --datadir node2 --port 30308 --bootnodes "enode://bcc4d5591bad591b86705366ccb008ec3c309dfa1de1436139f66533845e80ed00eb32c99838a279fa53c556dbff29093ef1da171ffd33a02a80f040fc2389ea@127.0.0.1:0?discport=30305"  --networkid 123454321 --unlock 0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17 --password node2/password.txt --authrpc.port 8552
+  geth --datadir node3 --port 30309 --ipcdisable --syncmode full --http --http.addr 0.0.0.0 --http.api admin,eth,miner,net,txpool,personal,web3 --allow-insecure-unlock --http.corsdomain "*" --http.vhosts "*" --http.port 8546 --bootnodes "enode://12fe081006ae40d11eb40b989a8fc1f50ae2b5ba90950397f55e491e7583fbba88871a99903a93be5b39560250d77e86c4b976146d5df3ed25a394b8ed0718ab@127.0.0.1:0?discport=30305"  --networkid 12345 --unlock 0xd871803ba61ed24c6dff76e5888fe83ca37aac74 --password node3/password.txt --authrpc.port 8553
+  ```
 
-LAUNCH THE JAVASCRIPT CONSOLE:
+more options:
+--mine console starts a console right away so you can mine
 
-geth attach node1/geth.ipc
+9. Launch a javascript console
 
+Start a console when the node is connected to the RPC:
+  - geth attach <datadir>/geth.ipc || example: geth attach node1/geth.ipc
+
+Start a console when the node is connected to HTTP:
+geth attach http://<http_address>:<http_port> || example: geth attach http://127.0.0.1:8546
+
+# Run a smart contract
+
+## Sources:
+https://medium.com/blockchainbistro/set-up-a-private-ethereum-blockchain-and-deploy-your-first-solidity-smart-contract-on-the-caa8334c343d
+
+## Steps
+
+1. Make sure to update the truffle-config.js on the development field:
+
+```
+# geth_http_address - The address where your node is running, locally normally is "127.0.0.1"
+# geth_http_port - The port where your node is running, normally:  8545
+# geth_node_address - The blockchain address from the node, example: 0xa490296e3bcd5c78afde68f9ea86e83adde6405e
+
+development: {
+  host: <geth_http_address>,
+  port: <geth_http_port>
+  network_id: "*",
+  from: <geth_node_address>
+  gas: 2000000
+}
+```
+
+2. run `truffle compile` to compile your contracts
+3. run `truffle migrate` to migrate your contracts
+4. run `truffle console` to run the console and once on the console run:
+```
+> var dApp
+> Hello.deployed().then(function(instance) { dApp = instance; })
+> dApp.message.call()
+```
+
+# Important commands
+
+## commands for the console
+- How many peers are on my network:
 net.peerCount
-eth.getBalance('0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17');
-
-get balance for current account:
-eth.getBalance(eth.accounts[0])
-
-eth.sendTransaction({ from: '0xEFa76134e3f4EFb19a1F596517b182c5B554b4aC', to: '0x6b1Eb8693A7157092E3faB3eDb24470335Fd0E17' , value: 25000 });
-
-eth.getBlock('latest')
+- Get balance for current account:
+web3.eth.getBalance(eth.accounts[0])
+- Get balance for another account:
+web3.eth.getBalance('<address>'); || example: web3.eth.getBalance('0x90458dc574f0a62228d3d2ff068f95e5f931d19b')
+- Send a transaction:
+web3.eth.sendTransaction({ from: eth.accounts[0], to: '0x8acc46e9f5a5f23519b3682567fffdef9e21dc31' , value: 1, gasPrice: 1000, data: '0x616e647265' })
+- Check gas for transaction:
+web3.eth.estimateGas({ from: eth.accounts[0], to: '0x90Af074EB5399C00587C5ef742CEc027aE77d9dF' , value: 1, gasPrice: 1000 })
+- Check a transaction:
+web3.eth.getTransaction('<transaction_id>') - this id is returned by `sendTransaction`
+eth.getTransaction("0x03b759fe11c104f8aad972ed2337e0f2e7f6c6bf26138badcbbf55801f643303")
+- check a receipt of a transaction:
+eth.getTransactionReceipt()
+- Start mining:
+miner.start() - this only works from the sealing node
+- Stop mining:
+miner.stop()
+- Information about network:
+last block: eth.getBlock('latest')
+whole network state: clique.getSnapshot()
+gas price: web3.eth.gasPrice
