@@ -28,6 +28,7 @@ https://geth.ethereum.org/docs/fundamentals/private-network
 https://medium.com/coinmonks/setup-geth-ethereum-private-network-3806ef7fbe42
 https://medium.com/hackernoon/setup-your-own-private-proof-of-authority-ethereum-network-with-geth-9a0a3750cda8
 https://ethereum.stackexchange.com/questions/56460/what-is-the-purpose-of-non-mining-sealer-nodes-in-clique-poa-private-ethereum-ne
+https://ethereum.stackexchange.com/questions/38064/automate-mining-based-on-a-trigger-in-geth
 
 ## Step by step guide:
 
